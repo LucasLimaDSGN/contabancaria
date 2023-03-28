@@ -3,18 +3,28 @@ package conta;
 import java.util.Scanner;
 import conta.util.cores;
 import conta.model.Conta;
+import conta.model.ContaCorrente;
+import conta.model.ContaPoupanca;
 
 public class Menu {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Conta c1 = new Conta(1, 123, 1, "Adriana", 10000.0f);
-		c1.visualizar();
-		c1.sacar(12000.0f);
-		c1.visualizar();
-		c1.depositar(5000.0f);
-		c1.visualizar();
+		
+		ContaCorrente cc1 = new ContaCorrente(2,234,1,"Mariana",15000.0f,1000.0f);
+		cc1.visualizar();
+		cc1.sacar(1200.0f);
+		cc1.visualizar();
+		cc1.depositar(5000.0f);
+		cc1.visualizar();
+		
+		ContaPoupanca cp1 = new ContaPoupanca(3,234,2,"Lucas",100000.0f,15);
+		cp1.visualizar();
+		cp1.sacar(1000.0f);
+		cp1.visualizar();
+		cp1.depositar(5000.0f);
+		cp1.visualizar();
 		
 		Scanner read = new Scanner(System.in);
 		
