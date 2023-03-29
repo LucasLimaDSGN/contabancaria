@@ -1,7 +1,11 @@
 package conta;
 
+
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import conta.util.cores;
+import conta.controller.ContaController;
 import conta.model.Conta;
 import conta.model.ContaCorrente;
 import conta.model.ContaPoupanca;
@@ -11,24 +15,15 @@ public class Menu {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
+		ContaController contas = new ContaController();
 		
-		ContaCorrente cc1 = new ContaCorrente(2,234,1,"Mariana",15000.0f,1000.0f);
-		cc1.visualizar();
-		cc1.sacar(1200.0f);
-		cc1.visualizar();
-		cc1.depositar(5000.0f);
-		cc1.visualizar();
-		
-		ContaPoupanca cp1 = new ContaPoupanca(3,234,2,"Lucas",100000.0f,15);
-		cp1.visualizar();
-		cp1.sacar(1000.0f);
-		cp1.visualizar();
-		cp1.depositar(5000.0f);
-		cp1.visualizar();
+	
 		
 		Scanner read = new Scanner(System.in);
 		
-		int opcao;
+		int opcao, numero, agencia, tipo, aniversario;
+		String titular;
+		float saldo=0, limite;
 		
 		while (true) {
 
@@ -52,9 +47,14 @@ public class Menu {
 			System.out.println("*****************************************************");
 			System.out.println("Entre com a opção desejada:                          ");
 			System.out.println("                                                     " + cores.TEXT_RESET);
-
+			try {
 			opcao = read.nextInt();
-
+			}catch (InputMismatchException e) {
+				System.out.println("\nDigite valores inteiros");
+				read.nextLine();
+				
+				opcao = 0;
+			}
 			if (opcao == 9) {
 				System.out.println(cores.TEXT_WHITE_BOLD + "\nBanco do Brazil com Z - O seu Futuro começa aqui!");
 				read.close();
@@ -65,42 +65,93 @@ public class Menu {
 			case 1:
 				System.out.println(cores.TEXT_WHITE_BOLD + "Criar Conta\n\n");
 
+				System.out.println("Digite o numero da Agencia: ");
+				agencia = read.nextInt();
+				
+				System.out.println("Digite o nome do Titular: ");
+				read.skip("\\R");
+				titular = read.nextLine();
+				
+				do {
+					System.out.println("Digite o tipo de conta(1-CC ou 2-CP): ");
+					tipo = read.nextInt();					
+					
+				}while(tipo <1 && tipo>2);
+				
+				System.out.println("Digite o saldo da conta (R$):");
+				
+				switch(tipo){
+				case 1 ->{
+					System.out.println("Digite o Limite de Credito (R$): ");
+					limite = read.nextFloat();
+					contas.cadastrar(new ContaCorrente(contas.gerarNumero(),agencia, tipo, titular, saldo, limite));
+				}
+				case 2 ->{
+					System.out.println("Digite o dia do aniversario da conta: ");
+					aniversario = read.nextInt();
+					contas.cadastrar(new ContaPoupanca(contas.gerarNumero(),agencia, tipo, titular, saldo, aniversario));
+					
+					
+				}
+				
+				
+				}
+				keyPress();
 				break;
 			case 2:
 				System.out.println(cores.TEXT_WHITE_BOLD + "Listar todas as Contas\n\n");
-
+				contas.listarTodas();
+				keyPress();
 				break;
 			case 3:
 				System.out.println(cores.TEXT_WHITE_BOLD + "Consultar dados da Conta - por número\n\n");
 
+				keyPress();
 				break;
 			case 4:
 				System.out.println(cores.TEXT_WHITE_BOLD + "Atualizar dados da Conta\n\n");
 
+				keyPress();
 				break;
 			case 5:
 				System.out.println(cores.TEXT_WHITE_BOLD + "Apagar a Conta\n\n");
 
+				keyPress();
 				break;
 			case 6:
 				System.out.println(cores.TEXT_WHITE_BOLD + "Saque\n\n");
 
+				keyPress();
 				break;
 			case 7:
 				System.out.println(cores.TEXT_WHITE_BOLD + "Depósito\n\n");
 
+				keyPress();
 				break;
 			case 8:
 				System.out.println(cores.TEXT_WHITE_BOLD + "Transferência entre Contas\n\n");
 
+				keyPress();
 				break;
 			default:
 				System.out.println(cores.TEXT_RED_BOLD + "\nOpção Inválida!\n");
+				keyPress();
 				break;
 			
 			}
 			
 		}
 	}
-
+	
+	public static void keyPress() {
+		try {
+			
+			System.out.println(cores.TEXT_RESET +"\n\nPressione Enter para continuar.");
+			System.in.read();
+		}catch(IOException e){
+			System.out.println("Voce pressionou uma tecla diferente de Enter");
+		}
+		
+	}
 }
+
